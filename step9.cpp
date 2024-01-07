@@ -587,6 +587,7 @@ class Parent {
 class GrandMother : public Parent {
     public:
         //initialization
+        GrandMother() {};
         GrandMother(string name, string surname, ParentROLE parentRole, bool mood) :Parent(name, surname, parentRole, mood) {};
 
         //told about...
@@ -726,5 +727,22 @@ int main()
     HappyTeacher happyT{ "Ivan","vas",22,HISTORY,FAST };
     BadTeacher badlyT{ "Kost","Inrt",43,MATH,NORMAL};
 
+     GrandMother BABA("NAD", "TUT", MUM, true);
+ Parent Papa("Dad", "Bad", DAD, true);
+ Papa.AddChildren(student2);
+ Papa.ToldAboutYou(student2);
+ BABA.AddChildren(student);
+ BABA.ToldAboutYou(student);
+ student.Give_Mark(5, HISTORY);
+ vector<GrandMother> baba;
+ vector< Parent> stud;
+ vector<Teacher> teach;
+ vector<Classes> less;
+ baba.push_back(BABA);
+ stud.push_back(Papa);
+ teach.push_back(teacher);
+ less.push_back(History);
+ Sobranie s1(stud,baba, teach, less);
+ s1.StartDiscuss();
     return 0;
 }
