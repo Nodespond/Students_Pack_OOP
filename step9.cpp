@@ -636,10 +636,18 @@ class GrandMother : public Parent {
 
 class Sobranie {
     private:
+        vector<GrandMother> Grandmama;
         vector<Parent> Parents;
         vector<Teacher> Teachers;
         vector<Classes> Lessons;
     public:
+
+        Sobranie(vector<Parent> parents,vector<GrandMother> old_mama, vector<Teacher> teachers, vector<Classes> lessons) {
+            Parents = parents;
+            Teachers = teachers;
+            Lessons = lessons;
+            Grandmama = old_mama;
+        }
 
         void StartDiscuss() {
             vector<Student> ShadowChilds;
@@ -648,18 +656,27 @@ class Sobranie {
                 for (int j = 0; j < Lessons[i].Students.size(); j++) {
                     //проверим,есть ли у нас родитель этого ученика
                     bool HaveParent = false;
+                    bool OldMama = false;
                     Parent StudParent;
+                    GrandMother OldMummy;
                     for (int g = 0; g < Parents.size(); g++) {
                         if (Parents[g].isChildMe(Lessons[i].Students[j]) == true) {
                             HaveParent = true;
                             StudParent = Parents[g];
                         }
                     }
+                    for (int g = 0; g < Grandmama.size(); g++) {
+                        if (Grandmama[g].isChildMe(Lessons[i].Students[j]) == true) {
+                            OldMama = true;
+                            OldMummy = Grandmama[g];
+                        }
+                    }
                     //если родителя студента нет - кидаю его в список
-                    if (HaveParent == false)
+                    if (HaveParent == false and OldMama == false and find(ShadowChilds.begin(),ShadowChilds.end(),Lessons[i].Students[j]) == ShadowChilds.end())
                         ShadowChilds.push_back(Lessons[i].Students[j]);
                     else {
-                        Subjects subj = this->Lessons[i].GetLessonSubj();
+                        Classes les1 = Lessons[i];
+                        Subjects subj = les1.GetLessonSubj();
                         int subjMarks = 0;
 
                         switch (subj) {
@@ -681,8 +698,10 @@ class Sobranie {
                         }
 
                         if (subjMarks >= 1) {
-                            StudParent.ToldAboutYou(this->Lessons[i].Students[j]);
-
+                            if(HaveParent)
+                                StudParent.ToldAboutYou(this->Lessons[i].Students[j]);
+                            if (OldMama)
+                                OldMummy.ToldAboutYou(Lessons[i].Students[j]);
                             Teacher Prepod = this->Lessons[i].GetLessonTeacher();
                             if (find(this->Teachers.begin(), this->Teachers.end(), Prepod) == this->Teachers.end()) {
                                 cout << "Nu , Prepoda net , koroche child tried so HARD!\n";
