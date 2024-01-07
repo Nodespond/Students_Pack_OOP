@@ -613,17 +613,15 @@ class Parent {
 
 class Sobranie {
     private:
-        vector<GrandMother> Grandmama;
         vector<Parent> Parents;
         vector<Teacher> Teachers;
         vector<Classes> Lessons;
     public:
 
-        Sobranie(vector<Parent> parents,vector<GrandMother> old_mama, vector<Teacher> teachers, vector<Classes> lessons) {
+        Sobranie(vector<Parent> parents, vector<Teacher> teachers, vector<Classes> lessons) {
             Parents = parents;
             Teachers = teachers;
             Lessons = lessons;
-            Grandmama = old_mama;
         }
 
         void StartDiscuss() {
@@ -633,23 +631,15 @@ class Sobranie {
                 for (int j = 0; j < Lessons[i].Students.size(); j++) {
                     //проверим,есть ли у нас родитель этого ученика
                     bool HaveParent = false;
-                    bool OldMama = false;
                     Parent StudParent;
-                    GrandMother OldMummy;
                     for (int g = 0; g < Parents.size(); g++) {
                         if (Parents[g].isChildMe(Lessons[i].Students[j]) == true) {
                             HaveParent = true;
                             StudParent = Parents[g];
                         }
                     }
-                    for (int g = 0; g < Grandmama.size(); g++) {
-                        if (Grandmama[g].isChildMe(Lessons[i].Students[j]) == true) {
-                            OldMama = true;
-                            OldMummy = Grandmama[g];
-                        }
-                    }
                     //если родителя студента нет - кидаю его в список
-                    if (HaveParent == false and OldMama == false and find(ShadowChilds.begin(),ShadowChilds.end(),Lessons[i].Students[j]) == ShadowChilds.end())
+                    if (HaveParent == false and find(ShadowChilds.begin(),ShadowChilds.end(),Lessons[i].Students[j]) == ShadowChilds.end())
                         ShadowChilds.push_back(Lessons[i].Students[j]);
                     else {
                         Classes les1 = Lessons[i];
@@ -675,10 +665,9 @@ class Sobranie {
                         }
 
                         if (subjMarks >= 1) {
-                            if(HaveParent)
+                            
                                 StudParent.ToldAboutYou(this->Lessons[i].Students[j]);
-                            if (OldMama)
-                                OldMummy.ToldAboutYou(Lessons[i].Students[j]);
+                           
                             Teacher Prepod = this->Lessons[i].GetLessonTeacher();
                             if (find(this->Teachers.begin(), this->Teachers.end(), Prepod) == this->Teachers.end()) {
                                 cout << "Nu , Prepoda net , koroche child tried so HARD!\n";
@@ -727,15 +716,13 @@ int main()
  Papa.AddChildren(student2);
  Papa.ToldAboutYou(student2);
  student.Give_Mark(5, HISTORY);
- vector<GrandMother> baba;
  vector< Parent> stud;
  vector<Teacher> teach;
  vector<Classes> less;
- baba.push_back(BABA);
  stud.push_back(Papa);
  teach.push_back(teacher);
  less.push_back(History);
- Sobranie s1(stud,baba, teach, less);
+ Sobranie s1(stud, teach, less);
  s1.StartDiscuss();
     
     return 0;
